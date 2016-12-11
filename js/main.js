@@ -25,7 +25,7 @@ canvas.width = w;
  var score = 0;	
 
  //Draw everything 	
- var render = function() {
+ function render() {
  	ctx.drawImage(player, 500,520);
  	ctx.drawImage(enemy, 500,20);
  	//ctx.drawImage(enemyBeam, 200, 200);
@@ -33,13 +33,14 @@ canvas.width = w;
  	ctx.font = "16px Press Start K"; //renders score
  	ctx.fillStyle = "yellow";
  	ctx.fillText("Score " +score, 10, 22);
- };
+ }
 
- var init = function() {
+ function init() {
  	render();
- };
+ 	requestAnimationFrame(init);
+ }
 
- init();
+ requestAnimationFrame(init);
 
  
  
