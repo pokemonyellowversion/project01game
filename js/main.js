@@ -10,13 +10,14 @@ canvas.height = h;
 canvas.width = w;
 
 //Load sprite images
-//function Image(src) {
-//	this.src = src;
-//}
-//var player = new Image("http://i.imgur.com/aevR7XM.png");
+function Image(src) {
+	this.src = src;
+}
 
-var player = new Image();
-player.src = "http://i.imgur.com/aevR7XM.png";
+var player = new Image("http://i.imgur.com/aevR7XM.png");
+
+//var player = new Image();
+//player.src = "http://i.imgur.com/aevR7XM.png";
   	
 var enemy = new Image();
 enemy.src = "http://i.imgur.com/QHVh32l.png";
