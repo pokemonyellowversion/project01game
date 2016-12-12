@@ -21,10 +21,20 @@ canvas.width = w;
  var playerBeam = new Image();
  playerBeam.src = "http://i.imgur.com/dMUuR5f.png";
 
-//Create score
+//Create score to start at 0
  var score = 0;	
 
- //Draw everything 	
+ //Add event listeners when keys pressed to move sprites
+var keys = [];
+document.body.addEventListner('keydown', function(evt) {
+	keys[evt.keyCode] = true;
+});
+
+document.body.addEventListner('keyup', function(evt) {
+	keys[evt.keyCode] = false;
+});
+
+//Draw everything 	
  function render() {
  	ctx.drawImage(player, 500,520);
  	ctx.drawImage(enemy, 500,20);
