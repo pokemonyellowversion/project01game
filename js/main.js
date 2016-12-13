@@ -14,20 +14,27 @@ var player = {
 	image: new Image (),
 	x: 500,
 	y: 520,
-	dx: 1,
+	dx: 0,
 	dy: 0
 };
 
 player.image.src = 'http://i.imgur.com/aevR7XM.png';
 
+var startNumEnemies = 2;
 var enemies = [];
-function Enemy (imgUrl, x, y, dx, dy) {
-	this.image = new Image ('http://i.imgur.com/QHVh32l.png');
-	this.x = 500;
-	this.y = 20;
-	this.dx = 0;
-	this.dy = 0;
-} 
+function Enemy (x, y, dx, dy) {
+	var img = new Image();
+	img.src = 'http://i.imgur.com/QHVh32l.png';
+	this.image = img;
+	this.x = x;
+	this.y = y;
+	this.dx = dx;
+	this.dy = dy;
+}
+
+for (var i = 0; i < startNumEnemies; i++) {
+	enemies.push(new Enemy(250*(i+1), -200, 1*i, 1));
+}
 
 //var enemyBeam = new Image();
 //enemyBeam.src = "http://i.imgur.com/DukiQLC.png";
@@ -41,30 +48,39 @@ var score = 0;
 document.addEventListener("keydown", keyPressed);
  
 function keyPressed(evt) {
+	// spacebar
 	if (evt.keyCode == 32) {
 		player.shoot();
 	}
+	// left
     if (evt.keyCode == 37) {
-        player.x -= player.dx;
+        player.dx -= 1;
     }
+    // right
     if (evt.keyCode === 39) {
-    	player.x += player.dx;
+    	player.dx += 1;
     }
-    render();
 }
 
-//function updatePositions() {
-//	//update player
-//	player.x += player.dx;
-//	player.y += player.dy;
-//}
+function updatePositions() {
+	//update player
+	player.x += player.dx;
+	player.y += player.dy;
+	// update enemies
+	enemies.forEach(function(enemy) {
+ 		enemy.x += enemy.dx;
+ 		enemy.y += enemy.dy;
+ 	});
+}
 
 //Draw everything 	
  function render() {
  	ctx.clearRect(0, 0, canvas.width, canvas.height);
- 	//updatePositions();
+ 	updatePositions();
  	ctx.drawImage(player.image, player.x, player.y);
- 	ctx.drawImage(Enemy.image, Enemy.x, Enemy.y);
+ 	enemies.forEach(function(enemy) {
+ 		ctx.drawImage(enemy.image, enemy.x, enemy.y);
+ 	});
  	//ctx.drawImage(enemyBeam, 200, 200);
  	//ctx.drawImage(playerBeam, 300, 300);
  	ctx.font = "16px Press Start K"; //renders score
@@ -74,10 +90,10 @@ function keyPressed(evt) {
 
  function init() {
  	render();
- 	//requestAnimationFrame(init);
+ 	requestAnimationFrame(init);
  }
 
- //requestAnimationFrame(init);
+ requestAnimationFrame(init);
 
  
  
