@@ -12,19 +12,20 @@ canvas.width = w;
 //Create sprites
 var player = {
 	image: new Image (),
-	x: 500,
+	x: w/2 - 50,
 	y: 520,
 	dx: 0,
 	dy: 0
+	//width: 100
 };
 
-player.image.src = 'http://i.imgur.com/aevR7XM.png';
+player.image.src = 'http://i.imgur.com/L8LDa4F.png';
 
 var startNumEnemies = 2;
 var enemies = [];
 function Enemy (x, y, dx, dy) {
 	var img = new Image();
-	img.src = 'http://i.imgur.com/QHVh32l.png';
+	img.src = 'http://i.imgur.com/XjhT2s0.png';
 	this.image = img;
 	this.x = x;
 	this.y = y;
@@ -33,7 +34,7 @@ function Enemy (x, y, dx, dy) {
 }
 
 for (var i = 0; i < startNumEnemies; i++) {
-	enemies.push(new Enemy(250*(i+1), -200, 1*i, 1));
+	enemies.push(new Enemy(250*(i+0.5), -200, 0.5*i, 0.5));
 }
 
 //var enemyBeam = new Image();
@@ -61,7 +62,8 @@ function updatePositions() {
 	//update player
 	player.x += player.dx;
 	player.y += player.dy;
-	if (player.x + player.dx > canvas.width) { //bounces off right wall
+	//bounces off left and right walls
+	if (player.x + player.dx > canvas.width || player.x + player.dx < 0) { 
 		player.dx = -player.dx;
 	}
 	// update enemies
