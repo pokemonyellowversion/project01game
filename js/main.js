@@ -48,16 +48,11 @@ var score = 0;
 document.addEventListener("keydown", keyPressed);
  
 function keyPressed(evt) {
-	// spacebar
-	if (evt.keyCode == 32) {
+	if (evt.keyCode == 32) { // spacebar
 		player.shoot();
-	}
-	// left
-    if (evt.keyCode == 37) {
+	} else if (evt.keyCode == 37) { // left
         player.dx -= 1;
-    }
-    // right
-    if (evt.keyCode === 39) {
+    } else if (evt.keyCode === 39) { // right
     	player.dx += 1;
     }
 }
@@ -66,6 +61,9 @@ function updatePositions() {
 	//update player
 	player.x += player.dx;
 	player.y += player.dy;
+	if (player.x + player.dx > canvas.width) { //bounces off right wall
+		player.dx = -player.dx;
+	}
 	// update enemies
 	enemies.forEach(function(enemy) {
  		enemy.x += enemy.dx;
