@@ -32,9 +32,9 @@ var playerBeam = {
 
 playerBeam.image.src = "http://i.imgur.com/dMUuR5f.png";
 
-//Create player shoot function
+//Create player shoot function and push beams
 player.shoot = function() {
-	var beamPosition = this.midpoint();//
+	var beamPosition = this.midpoint();
 
 playerBeam.push(new Beam({
 		x: beamPosition.x,
@@ -69,17 +69,12 @@ function Enemy (x, y, dx, dy) {
 var createEnemiesTimerId;
 var MAX_ENEMIES = 5;
 	
-
 //Create function to randomly add enemies over a random interval
-
 function createEnemy() {
 	var randX = getRandomBetween(100, canvas.width - 100);
 	var randDX = getRandomBetween(-2, 2);
 	enemies.push(new Enemy(randX, -150, randDX, 1));
 }
-
-//check number of enemies, if less than max enemies, create an enemy
-//setTimout
 
 function startCreateEnemies() {
 	createEnemiesTimerId = setTimeout(function() {
@@ -97,12 +92,12 @@ function getRandomBetween(min, max) {
 }
 
 //var enemyBeam = new Image();
-//enemyBeam.src = "http://i.imgur.com/DukiQLC.png";
-//  
+//enemyBeam.src = "http://i.imgur.com/DukiQLC.png";  
 
 //Create score to start at 0
 var score = 0;	
 
+//Add event listeners to keyboard controls
 document.addEventListener("keydown", keyPressed);
  
 function keyPressed(evt) {
@@ -146,7 +141,7 @@ function updatePositions() {
 }
 
 //Draw everything 	
- function render() {
+function render() {
  	ctx.clearRect(0, 0, canvas.width, canvas.height);
  	updatePositions();
  	ctx.drawImage(player.image, player.x, player.y);
@@ -160,12 +155,15 @@ function updatePositions() {
  	ctx.font = "16px Press Start K"; //renders score
  	ctx.fillStyle = "yellow";
  	ctx.fillText("Score " + score, 10, 22);
- }
+}
 
- function play() {
- 	render();
+function play() {
+	render();
  	requestAnimationFrame(play);
- }
+}
 
- requestAnimationFrame(play);
- startCreateEnemies();
+requestAnimationFrame(play);
+startCreateEnemies();
+
+
+
