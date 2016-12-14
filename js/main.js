@@ -43,13 +43,13 @@ function PlayerBeam(x, y) {
 //Create player shoot function and push beams
 player.shoot = function() {
 	if (maxBeams === playerBeams.length) return;
-	playerBeams.push(new PlayerBeam(player.midpoint().x, player.y));
+	playerBeams.push(new PlayerBeam(player.midpoint().x, player.midpoint().y));
 };
 
 player.midpoint = function() {
 	return {
-		x: this.x + 20,
-		y: this.y + this.height
+		x: this.x + this.width/2 - (61/2),
+		y: this.y + this.height/2 - 100
 	};
 };
 
@@ -133,6 +133,7 @@ function updatePositions() {
 		enemy.dx = -enemy.dx;
 	}
  	});
+ 	//if enemy y vertical position is less than canvas height
  	enemies = enemies.filter(function(enemy) {
  		return enemy.y < canvas.height;
 	});
