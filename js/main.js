@@ -11,6 +11,7 @@ canvas.width = w;
 
 //Add sound
 //var audio = new Audio('http://www.freesound.org/data/previews/15/15347_33253-lq.mp3');
+var beamSound = new Audio('http://www.freesound.org/data/previews/344/344310_6199418-lq.mp3');
 
 //Create player
 var player = {
@@ -28,7 +29,7 @@ player.image.src = 'http://i.imgur.com/L8LDa4F.png';
 //Create player beam
 var maxBeams = 5;
 var playerBeams = [];
-function PlayerBeam(x, y) {
+function PlayerBeam(x, y, dx, dy, width, height) {
 	var img = new Image();
 	img.src = "http://i.imgur.com/ljvSIOr.png";
 	this.image = img;
@@ -44,18 +45,19 @@ function PlayerBeam(x, y) {
 player.shoot = function() {
 	if (maxBeams === playerBeams.length) return;
 	playerBeams.push(new PlayerBeam(player.midpoint().x, player.midpoint().y));
+	beamSound.play();
 };
 
 player.midpoint = function() {
 	return {
-		x: this.x + this.width/2 - (61/2),
+		x: this.x + this.width/2 - 61/2,
 		y: this.y + this.height/2 - 100
 	};
 };
 
 //Create enemy
 var enemies = [];
-function Enemy (x, y, dx, dy) {
+function Enemy(x, y, dx, dy, width, height) {
 	var img = new Image();
 	img.src = 'http://i.imgur.com/Frun8cP.png';
 	this.image = img;
@@ -65,7 +67,6 @@ function Enemy (x, y, dx, dy) {
 	this.dy = dy;
 	this.width = 75;
 	this.height = 95;
-
 }
 
 var createEnemiesTimerId;
