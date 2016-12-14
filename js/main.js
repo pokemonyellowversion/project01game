@@ -9,6 +9,9 @@ var h = window.innerHeight;
 canvas.height = h;
 canvas.width = w;
 
+//Add sound
+//var audio = new Audio('http://www.freesound.org/data/previews/15/15347_33253-lq.mp3');
+
 //Create player
 var player = {
 	image: new Image(),
@@ -23,40 +26,39 @@ var player = {
 player.image.src = 'http://i.imgur.com/L8LDa4F.png';
 
 //Create player beam
-var playerBeam = [];
-var playerBeam = {
-	image: new Image(),
-	dx: 0,
-	dy: 0
-};
-
-playerBeam.image.src = "http://i.imgur.com/dMUuR5f.png";
+var maxBeams = 5;
+var playerBeams = [];
+function PlayerBeam(x, y) {
+	var img = new Image();
+	img.src = "http://i.imgur.com/ljvSIOr.png";
+	this.image = img;
+	this.x = x;
+	this.y = y;
+	this.dx = 0;
+	this.dy = -4;
+	this.width = 61;
+	this.height = 100;
+}
 
 //Create player shoot function and push beams
 player.shoot = function() {
-	var beamPosition = this.midpoint();
-
-playerBeam.push(new Beam({
-		x: beamPosition.x,
-		y: beamPosition.y
-	}));
+	if (maxBeams === playerBeams.length) return;
+	playerBeams.push(new PlayerBeam(player.midpoint().x, player.y));
 };
 
 player.midpoint = function() {
 	return {
-		x: this.x + this.width/2,
-		y: this.y + this.height/2
+		x: this.x + 20,
+		y: this.y + this.height
 	};
 };
 
 //Create enemy
-var startNumEnemies = 3;
 var enemies = [];
 function Enemy (x, y, dx, dy) {
 	var img = new Image();
 	img.src = 'http://i.imgur.com/Frun8cP.png';
 	this.image = img;
-	this.id = Date.now();
 	this.x = x;
 	this.y = y;
 	this.dx = dx;
@@ -67,18 +69,19 @@ function Enemy (x, y, dx, dy) {
 }
 
 var createEnemiesTimerId;
-var MAX_ENEMIES = 5;
+var maxEnemies = 3;
 	
 //Create function to randomly add enemies over a random interval
 function createEnemy() {
 	var randX = getRandomBetween(100, canvas.width - 100);
 	var randDX = getRandomBetween(-2, 2);
-	enemies.push(new Enemy(randX, -150, randDX, 1));
+	enemies.push(new Enemy(randX, -150, randDX, enemyAcceleration));
+	//audio.play();
 }
 
 function startCreateEnemies() {
 	createEnemiesTimerId = setTimeout(function() {
-		if (enemies.length < MAX_ENEMIES) createEnemy();
+		if (enemies.length < maxEnemies) createEnemy();
 		startCreateEnemies();
 	}, getRandomBetween(1000, 3000));
 }
@@ -134,10 +137,26 @@ function updatePositions() {
  		return enemy.y < canvas.height;
 	});
  	//update beams
-// 	playerBeam.forEach(function(beam) {
-// 		beamPosition.x += beamPosition.dx;
-// 		beamPosition.y += beamPosition.dy;
-// 	});
+ 	playerBeams.forEach(function(beam) {
+ 		beam.x += beam.dx;
+ 		beam.y += beam.dy;
+ 	});
+ 	playerBeams = playerBeams.filter(function(beam) {
+ 		return beam.y < canvas.height;
+ 	});
+}
+
+//Increase number of enemies and enemy speed every x seconds
+var enemyAcceleration = 1.5;
+var incEnemiesTickCount = 5;
+var tickCounter = 0;
+var intervalId = setInterval(handleIntervalTick, 3000);
+
+function handleIntervalTick() {
+	enemyAcceleration += 0.3;
+	// max acceleration
+	enemyAcceleration = Math.min(enemyAcceleration, 30);
+	tickCounter++;
 }
 
 //Draw everything 	
@@ -148,13 +167,13 @@ function render() {
  	enemies.forEach(function(enemy) {
  		ctx.drawImage(enemy.image, enemy.x, enemy.y);
  	});
- 	//ctx.drawImage(enemyBeam, 200, 200);
- 	//playerBeam.forEach(function(beam) {
-// 		ctx.drawImage(playerBeam.image, beamPosition.x, beamPosition.y);
-// 	});
+ 	playerBeams.forEach(function(beam) {
+ 		ctx.drawImage(beam.image, beam.x, beam.y);
+ 	});
  	ctx.font = "16px Press Start K"; //renders score
  	ctx.fillStyle = "yellow";
  	ctx.fillText("Score " + score, 10, 22);
+ 	ctx.fillText("Enemy Speed " + enemyAcceleration.toFixed(2), canvas.width - 280, 22);
 }
 
 function play() {
@@ -163,7 +182,10 @@ function play() {
 }
 
 requestAnimationFrame(play);
-startCreateEnemies();
 
+//document.getElementById('start').addEventListener('click', function() {
+	startCreateEnemies();
+	//document.getElementById('startScreen').style.display=none;
+//});
 
 
