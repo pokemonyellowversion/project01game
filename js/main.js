@@ -1,5 +1,3 @@
-
-
 //Link canvas to html
 var canvas = document.getElementById('canvas'); //access the rendering context and draw on it
 var ctx = canvas.getContext('2d'); //method to obtain rendering context and drawing functions
@@ -15,7 +13,7 @@ canvas.width = w;
 var player = {
 	image: new Image(),
 	x: w/2 - 50,
-	y: 550,
+	y: 570,
 	dx: 0,
 	dy: 0,
 	width: 100,
@@ -56,15 +54,15 @@ var startNumEnemies = 3;
 var enemies = [];
 function Enemy (x, y, dx, dy) {
 	var img = new Image();
-	img.src = 'http://i.imgur.com/XjhT2s0.png';
+	img.src = 'http://i.imgur.com/Frun8cP.png';
 	this.image = img;
 	this.id = Date.now();
 	this.x = x;
 	this.y = y;
 	this.dx = dx;
 	this.dy = dy;
-	this.width = 100;
-	this.height = 126;
+	this.width = 75;
+	this.height = 95;
 
 }
 
@@ -95,7 +93,7 @@ function stopCreateEnemies() {
 }
 
 function getRandomBetween(min, max) {
-	return min + Math.floor(Math.random() * (max-min));
+	return min + Math.floor(Math.random() * (max - min));
 }
 
 //var enemyBeam = new Image();
@@ -114,7 +112,7 @@ function keyPressed(evt) {
         player.dx -= 0.5;
     } else if (evt.keyCode === 39) { // right
     	player.dx += 0.5;
-    } else if (evt.keyCode == 38) { // up
+    } else if (evt.keyCode == 40) { // down
         player.dx = 0;
     }    
 }
@@ -161,7 +159,7 @@ function updatePositions() {
 // 	});
  	ctx.font = "16px Press Start K"; //renders score
  	ctx.fillStyle = "yellow";
- 	ctx.fillText("Score " +score, 10, 22);
+ 	ctx.fillText("Score " + score, 10, 22);
  }
 
  function play() {
@@ -171,4 +169,3 @@ function updatePositions() {
 
  requestAnimationFrame(play);
  startCreateEnemies();
- 
