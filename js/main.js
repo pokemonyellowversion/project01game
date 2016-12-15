@@ -12,6 +12,7 @@ canvas.width = w;
 //Add sound
 var enemyExplosion = new Audio('http://www.freesound.org/data/previews/259/259962_2463454-lq.mp3');
 var beamSound = new Audio('http://www.freesound.org/data/previews/344/344310_6199418-lq.mp3');
+var gameOverSound = new Audio('http://www.freesound.org/data/previews/333/333785_5858296-lq.mp3');
 
 //Create player
 var player = {
@@ -78,7 +79,6 @@ function createEnemy() {
 	var randX = getRandomBetween(100, canvas.width - 100);
 	var randDX = getRandomBetween(-2, 2);
 	enemies.push(new Enemy(randX, -150, randDX, enemyAcceleration));
-	//audio.play();
 }
 
 function startCreateEnemies() {
@@ -136,7 +136,7 @@ function checkEnemyPlayerCollision() {
 	enemies.forEach(function(enemy) {
 		if (enemyCollisionDetection(enemy)) {
 			//game over
-			console.log('game over');
+			gameOver();
 		}
 	});
 }
@@ -167,12 +167,11 @@ function checkCollisions() {
 	checkBeamEnemyCollision();
 }
 
-function checkWinOrLose() {
-	if (score === 5000) {
-		alert('You win!');
-	} else if (collison === true) {
-		alert('You lose!');
-	}
+function gameOver() {
+	gameOverSound.play();
+	stopCreateEnemies();
+	clearInterval(intervalId);
+	//player.remove();
 }
 
 //Update everything to move sprites
