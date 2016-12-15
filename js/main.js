@@ -1,6 +1,6 @@
 // Link canvas to html
-var canvas = document.getElementById('canvas'); //access the rendering context and draw on it
-var ctx = canvas.getContext('2d'); //method to obtain rendering context and drawing functions
+var canvas = document.getElementById('canvas'); // access the canvas element from html
+var ctx = canvas.getContext('2d'); // create getContext() html object with properties and methods for drawing
 
 // Set canvas size to window width and height
 var w = window.innerWidth;
@@ -14,7 +14,28 @@ var enemyExplosion = new Audio('http://www.freesound.org/data/previews/259/25996
 var beamSound = new Audio('http://www.freesound.org/data/previews/344/344310_6199418-lq.mp3');
 var gameOverSound = new Audio('http://www.freesound.org/data/previews/333/333785_5858296-lq.mp3');
 var youWinSound = new Audio('http://freesound.org/data/previews/270/270333_5123851-lq.mp3');
-youWinSound.loop = false;
+youWinSound.loop = false; // plays sound only once
+
+// Display start screen
+function startScreen() {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.font = "90px Press Start K"; 
+	ctx.fillText("Space Shooters", 270, 300);
+	ctx.font = "40px Press Start K"; 
+	ctx.fillText("Press left and right arrows keys to move, spacebar to shoot", 420, 400);
+	ctx.font = "30px Press Start K"; 
+	ctx.fillText("Start", 480, 490);
+	ctx.beginPath();
+	ctx.rect(480, 490, 100, 100);
+	ctx.addHitRegion({id: start});
+}
+
+canvas.onclick = function (evt) {
+    if (evt.region) {
+        requestAnimationFrame(play);
+        startCreateEnemies();
+    }
+};
 
 // Create player spaceship sprite
 var player = {
@@ -101,9 +122,11 @@ function getRandomBetween(min, max) { // generates a random number between two n
 //var enemyBeam = new Image();
 //enemyBeam.src = "http://i.imgur.com/DukiQLC.png";  
 
-// Create score and set to 0 to start
+// Create score and set to 0 at start
 var score = 0;	
-var scoreEl = document.getElementById('score');
+
+// Create enemies destroyed counter and set to 0 at start
+var numEnemiesDestroyed = 0;
 
 // Add event listeners to keyboard controls when keys are pressed down
 document.addEventListener("keydown", keyPressed);
@@ -150,6 +173,7 @@ function checkBeamEnemyCollision() { // if beam collided with enemy, removes bot
 				enemy.remove = true; // removes enemy
 				enemyExplosion.play();
 				score += 100;
+				numEnemiesDestroyed++;
 			}
 		});
 	});
@@ -162,13 +186,13 @@ function checkBeamEnemyCollision() { // if beam collided with enemy, removes bot
 }
 
 function checkScore() {
-	if (score == 100) {
+	if (numEnemiesDestroyed == 10) {
 		youWinSound.play();
 		endGame();
-		ctx.font = "70px Press Start K"; 
-		ctx.fillText("YOU WIN", canvas.width/2 - 270, canvas.height/2);
-		ctx.font = "30px Press Start K"; 
-		ctx.fillText("Your score: " + score, 480, 400);
+		ctx.font = "90px Press Start K"; 
+		ctx.fillText("YOU WIN", 270, 300);
+		ctx.font = "40px Press Start K"; 
+		ctx.fillText("Your score: " + score, 420, 400);
 		player.remove();
 		enemy.remove();
 	}
@@ -189,14 +213,14 @@ function checkCollisions() {
 function gameOver() {
 	gameOverSound.play();
 	endGame();
-	ctx.font = "70px Press Start K"; 
-	ctx.fillText("GAME OVER", canvas.width/2 - 310, canvas.height/2);
+	ctx.font = "90px Press Start K"; 
+	ctx.fillText("GAME OVER", 270, 300);
+	ctx.font = "40px Press Start K"; 
+	ctx.fillText("Your score: " + score, 420, 400);
 	ctx.font = "30px Press Start K"; 
-	ctx.fillText("Your score: " + score, 430, 400);
+	ctx.fillText("Play Again?", 480, 490);
 	player.remove();
 	enemy.remove();
-	ctx.font = "30px Press Start K"; 
-	ctx.fillText("Play Again?", canvas.width/2 - 200, canvas.height/2 - 10);
 }
 
 // Update everything to move sprites
@@ -237,7 +261,7 @@ function handleIntervalTick() {
 	tickCounter++;
 }
 
-// Draw everything 	
+// Draw everything on the canvas	
 function render() {
  	ctx.clearRect(0, 0, canvas.width, canvas.height);
  	updatePositions();
@@ -249,10 +273,10 @@ function render() {
  		ctx.drawImage(beam.image, beam.x, beam.y);
  	});
  	checkCollisions();
- 	ctx.font = "16px Press Start K"; // renders score
+ 	ctx.font = "16px Press Start K"; 
  	ctx.fillStyle = "yellow";
- 	ctx.fillText("Score " + score, 20, 30);
- 	ctx.fillText("Enemy Speed " + enemyAcceleration.toFixed(2), canvas.width - 280, 30);
+ 	ctx.fillText("Score " + score, 20, 30); // displays score
+ 	ctx.fillText("Enemy Speed " + enemyAcceleration.toFixed(2), canvas.width - 280, 30); // displays enemy speed 
 }
 
 // Create main game loop
