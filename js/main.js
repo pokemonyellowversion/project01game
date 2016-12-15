@@ -13,6 +13,8 @@ canvas.width = w;
 var enemyExplosion = new Audio('http://www.freesound.org/data/previews/259/259962_2463454-lq.mp3');
 var beamSound = new Audio('http://www.freesound.org/data/previews/344/344310_6199418-lq.mp3');
 var gameOverSound = new Audio('http://www.freesound.org/data/previews/333/333785_5858296-lq.mp3');
+var youWinSound = new Audio('http://freesound.org/data/previews/270/270333_5123851-lq.mp3');
+youWinSound.loop = false;
 
 //Create player
 var player = {
@@ -163,13 +165,16 @@ function checkBeamEnemyCollision() {
 }
 
 function checkScore() {
-	if (score == 2000) {
+	if (score == 100) {
+		youWinSound.play();
 		stopCreateEnemies();
 		clearInterval(intervalId);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.font = "70px Press Start K"; 
 		ctx.fillStyle = "yellow";
-		ctx.fillText("YOU WIN", canvas.width/2 - 250, canvas.height/2);
+		ctx.fillText("YOU WIN", canvas.width/2 - 270, canvas.height/2);
+		player.remove();
+		enemy.remove();
 	}
 }
 
@@ -186,7 +191,12 @@ function gameOver() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.font = "70px Press Start K"; 
 	ctx.fillStyle = "yellow";
-	ctx.fillText("GAME OVER", canvas.width/2 - 350, canvas.height/2);
+	ctx.fillText("GAME OVER", canvas.width/2 - 310, canvas.height/2);
+	ctx.font = "30px Press Start K"; 
+	ctx.fillStyle = "yellow";
+	ctx.fillText("Your score: ", canvas.width/2 - 310, canvas.height/2 + 200);
+	player.remove();
+	enemy.remove();
 	//ctx.font = "30px Press Start K"; 
 //	ctx.fillStyle = "yellow";
 //	ctx.fillText("Play Again?", canvas.width/2 - 200, canvas.height/2 - 10);
@@ -223,7 +233,7 @@ function updatePositions() {
  		return beam.y > -95;
  	});
  	//enemyCollisionDetection();
-	//scoreEl.innerHTML = score;
+	scoreEl.innerHTML = score;
 }
 
 //Increase number of enemies and enemy speed every x seconds
