@@ -14,7 +14,7 @@ var enemyExplosion = new Audio('http://www.freesound.org/data/previews/259/25996
 var beamSound = new Audio('http://www.freesound.org/data/previews/344/344310_6199418-lq.mp3');
 var gameOverSound = new Audio('http://www.freesound.org/data/previews/333/333785_5858296-lq.mp3');
 var youWinSound = new Audio('http://freesound.org/data/previews/270/270333_5123851-lq.mp3');
-youWinSound.loop = false;
+youWinSound.loop = false; // plays sound only once
 
 // Create player spaceship sprite
 var player = {
@@ -26,8 +26,6 @@ var player = {
 	width: 100,
 	height: 73
 };
-
-// function
 
 player.image.src = 'http://i.imgur.com/L8LDa4F.png';
 
@@ -98,14 +96,13 @@ function stopCreateEnemies() {
 
 function getRandomBetween(min, max) { // generates a random number between two numbers
 	return min + Math.floor(Math.random() * (max - min));
-}
+} 
 
-//var enemyBeam = new Image();
-//enemyBeam.src = "http://i.imgur.com/DukiQLC.png";  
-
-// Create score and set to 0 to start
+// Create score and set to 0 at start
 var score = 0;	
-var scoreEl = document.getElementById('score');
+
+// Create enemy counter and set to 0 at start
+var numEnemiesDestroyed = 0;
 
 // Add event listeners to keyboard controls when keys are pressed down
 document.addEventListener("keydown", keyPressed);
@@ -119,9 +116,13 @@ function keyPressed(evt) {
     	player.dx += 0.5;
     } else if (evt.keyCode == 40) { // down
         player.dx = 0;
-    }    
+    } else if (evt.keyCode == 13) { // enter
+    	play();
+    	startCreateEnemies();
+    }   
 }
 
+// Create functions to detect collisions
 function beamEnemyDetection(beam, enemy) { // checks if beam collided with enemy
 	return (beam.x < enemy.x + enemy.width - 30 &&
 		beam.x + beam.width > enemy.x &&
@@ -152,6 +153,7 @@ function checkBeamEnemyCollision() { // if beam collided with enemy, removes bot
 				enemy.remove = true; // removes enemy
 				enemyExplosion.play();
 				score += 100;
+				numEnemiesDestroyed++;
 			}
 		});
 	});
@@ -163,14 +165,23 @@ function checkBeamEnemyCollision() { // if beam collided with enemy, removes bot
 	});
 }
 
+function checkCollisions() {
+	checkEnemyPlayerCollision();
+	checkBeamEnemyCollision();
+	checkScore();
+}
+
+// Create functions to check score for winner or game over
 function checkScore() {
-	if (score == 100) {
+	if (numEnemiesDestroyed == 1) {
 		youWinSound.play();
 		endGame();
-		ctx.font = "70px Press Start K"; 
-		ctx.fillText("YOU WIN", canvas.width/2 - 270, canvas.height/2);
+		ctx.font = "90px Press Start K"; 
+		ctx.fillText("YOU WIN", 280, 280);
 		ctx.font = "30px Press Start K"; 
-		ctx.fillText("Your score: " + score, 480, 400);
+		ctx.fillText("Your score: " + score, 410, 380);
+		ctx.font = "30px Press Start K"; 
+		ctx.fillText("Press enter to play again", 290, 480);
 		player.remove();
 		enemy.remove();
 	}
@@ -182,23 +193,17 @@ function endGame() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function checkCollisions() {
-	checkEnemyPlayerCollision();
-	checkBeamEnemyCollision();
-	checkScore();
-}
-
 function gameOver() {
 	gameOverSound.play();
 	endGame();
-	ctx.font = "70px Press Start K"; 
-	ctx.fillText("GAME OVER", canvas.width/2 - 310, canvas.height/2);
+	ctx.font = "90px Press Start K"; 
+	ctx.fillText("GAME OVER", 280, 280);
 	ctx.font = "30px Press Start K"; 
-	ctx.fillText("Your score: " + score, 430, 400);
+	ctx.fillText("Your score: " + score, 410, 380);
+	ctx.font = "30px Press Start K"; 
+	ctx.fillText("Press enter to play again", 290, 480);
 	player.remove();
 	enemy.remove();
-	ctx.font = "30px Press Start K"; 
-	ctx.fillText("Play Again?", canvas.width/2 - 200, canvas.height/2 - 10);
 }
 
 // Update everything to move sprites
@@ -239,7 +244,7 @@ function handleIntervalTick() {
 	tickCounter++;
 }
 
-// Draw everything 	
+// Draw everything on the canvas	
 function render() {
  	ctx.clearRect(0, 0, canvas.width, canvas.height);
  	updatePositions();
