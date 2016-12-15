@@ -10,7 +10,7 @@ canvas.height = h;
 canvas.width = w;
 
 //Add sound
-//var audio = new Audio('http://www.freesound.org/data/previews/15/15347_33253-lq.mp3');
+var enemyExplosion = new Audio('http://www.freesound.org/data/previews/259/259962_2463454-lq.mp3');
 var beamSound = new Audio('http://www.freesound.org/data/previews/344/344310_6199418-lq.mp3');
 
 //Create player
@@ -119,16 +119,16 @@ function keyPressed(evt) {
 }
 
 function beamEnemyDetection(beam, enemy) {
-	return (beam.x < enemy.x + enemy.width &&
+	return (beam.x < enemy.x + enemy.width - 30 &&
 		beam.x + beam.width > enemy.x &&
-		beam.y < enemy.y + enemy.height &&
+		beam.y < enemy.y + enemy.height - 30 &&
 		beam.height + beam.y > enemy.y);
 }
 
 function enemyCollisionDetection(enemy) {
-	return (player.x < enemy.x + enemy.width &&
+	return (player.x < enemy.x + enemy.width - 30 &&
 		player.x + player.width > enemy.x &&
-		player.y < enemy.y + enemy.height &&
+		player.y < enemy.y + enemy.height - 30 &&
 		player.height + player.y > enemy.y);
 }
 
@@ -149,6 +149,7 @@ function checkBeamEnemyCollision() {
 				beam.remove = true;
 				// remove enemy
 				enemy.remove = true;
+				enemyExplosion.play();
 				score += 100;
 			}
 		});
@@ -216,7 +217,7 @@ var intervalId = setInterval(handleIntervalTick, 4000);
 function handleIntervalTick() {
 	enemyAcceleration += 0.2;
 	// max acceleration
-	enemyAcceleration = Math.min(enemyAcceleration, 8);
+	enemyAcceleration = Math.min(enemyAcceleration, 7);
 	tickCounter++;
 }
 
