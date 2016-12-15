@@ -25,7 +25,7 @@ var player = {
 	dy: 0,
 	width: 100,
 	height: 73
-};
+};hi
 
 player.image.src = 'http://i.imgur.com/L8LDa4F.png';
 
