@@ -1,6 +1,6 @@
 // Link canvas to html
-var canvas = document.getElementById('canvas'); //access the rendering context and draw on it
-var ctx = canvas.getContext('2d'); //method to obtain rendering context and drawing functions
+var canvas = document.getElementById('canvas'); //access the canvas
+var ctx = canvas.getContext('2d'); // access methods and propertie to draw on the canvas
 
 // Set canvas size to window width and height
 var w = window.innerWidth;
@@ -11,7 +11,7 @@ canvas.width = w;
 
 // Add sounds
 var enemyExplosion = new Audio('http://www.freesound.org/data/previews/259/259962_2463454-lq.mp3');
-var beamSound = new Audio('http://www.freesound.org/data/previews/344/344310_6199418-lq.mp3');
+var beamSound = new Audio('http://www.galaxyfaraway.com/Sounds/LAZER.WAV');
 var gameOverSound = new Audio('http://www.freesound.org/data/previews/333/333785_5858296-lq.mp3');
 var youWinSound = new Audio('http://freesound.org/data/previews/270/270333_5123851-lq.mp3');
 youWinSound.loop = false; // plays sound only once
@@ -27,7 +27,7 @@ var player = {
 	height: 73
 };
 
-player.image.src = 'http://i.imgur.com/L8LDa4F.png';
+player.image.src = 'http://i.imgur.com/8eQAmcw.png';
 
 // Create player beams(bullets) sprites
 var maxBeams = 5;
@@ -58,11 +58,11 @@ player.midpoint = function() { // beam appears at midpoint of player's (x,y) pos
 	};
 };
 
-//Create enemy spaceship sprite
+// Create enemy spaceship sprite
 var enemies = [];
 function Enemy (x, y, dx, dy, width, height) {
 	var img = new Image();
-	img.src = 'http://i.imgur.com/Frun8cP.png';
+	img.src = 'http://i.imgur.com/zNUXYdy.png';
 	this.image = img;
 	this.id = Date.now();
 	this.x = x;
@@ -105,21 +105,21 @@ var score = 0;
 var numEnemiesDestroyed = 0;
 
 // Add event listeners to keyboard controls when keys are pressed down
-document.addEventListener("keydown", keyPressed);
+document.addEventListener('keydown', keyPressed);
  
 function keyPressed(evt) {
 	if (evt.keyCode == 32) { // spacebar
 		player.shoot();
 	} else if (evt.keyCode == 37) { // left
         player.dx -= 0.5;
-    } else if (evt.keyCode === 39) { // right
+    } else if (evt.keyCode == 39) { // right
     	player.dx += 0.5;
     } else if (evt.keyCode == 40) { // down
         player.dx = 0;
     } else if (evt.keyCode == 13) { // enter
-    	play();
-    	startCreateEnemies();
-    }   
+	    play();
+	    startCreateEnemies(); 
+	}     
 }
 
 // Create functions to detect collisions
@@ -173,15 +173,15 @@ function checkCollisions() {
 
 // Create functions to check score for winner or game over
 function checkScore() {
-	if (numEnemiesDestroyed == 1) {
+	if (numEnemiesDestroyed == 10) {
 		youWinSound.play();
 		endGame();
-		ctx.font = "90px Press Start K"; 
-		ctx.fillText("YOU WIN", 280, 280);
-		ctx.font = "30px Press Start K"; 
-		ctx.fillText("Your score: " + score, 410, 380);
-		ctx.font = "30px Press Start K"; 
-		ctx.fillText("Press enter to play again", 290, 480);
+		ctx.font = '90px Press Start K'; 
+		ctx.fillText('YOU WIN', 300, 280);
+		ctx.font = '30px Press Start K'; 
+		ctx.fillText('Your score: ' + score, 410, 380);
+//		ctx.font = '30px Press Start K'; 
+//		ctx.fillText('Press enter to play again', 290, 480);
 		player.remove();
 		enemy.remove();
 	}
@@ -196,12 +196,12 @@ function endGame() {
 function gameOver() {
 	gameOverSound.play();
 	endGame();
-	ctx.font = "90px Press Start K"; 
-	ctx.fillText("GAME OVER", 280, 280);
-	ctx.font = "30px Press Start K"; 
-	ctx.fillText("Your score: " + score, 410, 380);
-	ctx.font = "30px Press Start K"; 
-	ctx.fillText("Press enter to play again", 290, 480);
+	ctx.font = '90px Press Start K'; 
+	ctx.fillText('GAME OVER', 280, 280);
+	ctx.font = '30px Press Start K'; 
+	ctx.fillText('Your score: ' + score, 410, 380);
+//	ctx.font = '30px Press Start K'; 
+//	ctx.fillText('Press enter to play again', 290, 480);
 	player.remove();
 	enemy.remove();
 }
@@ -221,6 +221,9 @@ function updatePositions() {
 	}
  	});
  	enemies = enemies.filter(function(enemy) { // removes enemies if they go offscreen
+ 		//if (enemy.y + enemy.dy > canvas.height - enemy.height || enemy.y + enemy.dy < 0) {
+// 			score -= 50;
+// 		}
  		return enemy.y < canvas.height;
 	});
  	playerBeams.forEach(function(beam) { // updates beams
@@ -256,10 +259,11 @@ function render() {
  		ctx.drawImage(beam.image, beam.x, beam.y);
  	});
  	checkCollisions();
- 	ctx.font = "16px Press Start K"; // renders score
- 	ctx.fillStyle = "yellow";
- 	ctx.fillText("Score " + score, 20, 30);
- 	ctx.fillText("Enemy Speed " + enemyAcceleration.toFixed(2), canvas.width - 280, 30);
+ 	ctx.font = '16px Press Start K'; // renders score
+ 	ctx.fillStyle = 'yellow';
+ 	ctx.fillText('Score: ' + score, 20, 30);
+ 	ctx.fillText('Targets destroyed: ' + numEnemiesDestroyed, 20, 50);
+ 	ctx.fillText('Enemy Speed ' + enemyAcceleration.toFixed(2), canvas.width - 280, 30);
 }
 
 // Create main game loop
