@@ -162,16 +162,35 @@ function checkBeamEnemyCollision() {
 	});
 }
 
+function checkScore() {
+	if (score == 2000) {
+		stopCreateEnemies();
+		clearInterval(intervalId);
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.font = "70px Press Start K"; 
+		ctx.fillStyle = "yellow";
+		ctx.fillText("YOU WIN", canvas.width/2 - 250, canvas.height/2);
+	}
+}
+
 function checkCollisions() {
 	checkEnemyPlayerCollision();
 	checkBeamEnemyCollision();
+	checkScore();
 }
 
 function gameOver() {
 	gameOverSound.play();
 	stopCreateEnemies();
 	clearInterval(intervalId);
-	//player.remove();
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.font = "70px Press Start K"; 
+	ctx.fillStyle = "yellow";
+	ctx.fillText("GAME OVER", canvas.width/2 - 350, canvas.height/2);
+	//ctx.font = "30px Press Start K"; 
+//	ctx.fillStyle = "yellow";
+//	ctx.fillText("Play Again?", canvas.width/2 - 200, canvas.height/2 - 10);
+//	return true;
 }
 
 //Update everything to move sprites
@@ -234,18 +253,18 @@ function render() {
  	checkCollisions();
  	ctx.font = "16px Press Start K"; //renders score
  	ctx.fillStyle = "yellow";
- 	ctx.fillText("Score " + score, 10, 22);
- 	ctx.fillText("Enemy Speed " + enemyAcceleration.toFixed(2), canvas.width - 280, 22);
+ 	ctx.fillText("Score " + score, 20, 30);
+ 	ctx.fillText("Enemy Speed " + enemyAcceleration.toFixed(2), canvas.width - 280, 30);
 }
 
 function play() {
 	render();
  	requestAnimationFrame(play);
+ 	//if (gameOver() === true) {
+// 		break; 
+// 	}
 }
 
 requestAnimationFrame(play);
+startCreateEnemies();
 
-//document.getElementById('start').addEventListener('click', function() {
-	startCreateEnemies();
-	//document.getElementById('startScreen').style.display=none;
-//});
