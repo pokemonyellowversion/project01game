@@ -57,10 +57,11 @@ player.midpoint = function() {
 
 //Create enemy
 var enemies = [];
-function Enemy(x, y, dx, dy, width, height) {
+function Enemy (x, y, dx, dy, width, height) {
 	var img = new Image();
 	img.src = 'http://i.imgur.com/Frun8cP.png';
 	this.image = img;
+	this.id = Date.now();
 	this.x = x;
 	this.y = y;
 	this.dx = dx;
@@ -100,6 +101,7 @@ function getRandomBetween(min, max) {
 
 //Create score to start at 0
 var score = 0;	
+var scoreEl = document.getElementById('score');
 
 //Add event listeners to keyboard controls
 document.addEventListener("keydown", keyPressed);
@@ -114,6 +116,62 @@ function keyPressed(evt) {
     } else if (evt.keyCode == 40) { // down
         player.dx = 0;
     }    
+}
+
+function beamEnemyDetection(beam, enemy) {
+	return (beam.x < enemy.x + enemy.width &&
+		beam.x + beam.width > enemy.x &&
+		beam.y < enemy.y + enemy.height &&
+		beam.height + beam.y > enemy.y);
+}
+
+function enemyCollisionDetection(enemy) {
+	return (player.x < enemy.x + enemy.width &&
+		player.x + player.width > enemy.x &&
+		player.y < enemy.y + enemy.height &&
+		player.height + player.y > enemy.y);
+}
+
+function checkEnemyPlayerCollision() {
+	enemies.forEach(function(enemy) {
+		if (enemyCollisionDetection(enemy)) {
+			//game over
+			console.log('game over');
+		}
+	});
+}
+
+function checkBeamEnemyCollision() {
+	playerBeams.forEach(function(beam) {
+		enemies.forEach(function(enemy) {
+			if (beamEnemyDetection(beam, enemy)) {
+				// remove beam
+				beam.remove = true;
+				// remove enemy
+				enemy.remove = true;
+				score += 100;
+			}
+		});
+	});
+	playerBeams = playerBeams.filter(function(beam) {
+		return !beam.remove;
+	});
+	enemies = enemies.filter(function(enemy) {
+		return !enemy.remove;
+	});
+}
+
+function checkCollisions() {
+	checkEnemyPlayerCollision();
+	checkBeamEnemyCollision();
+}
+
+function checkWinOrLose() {
+	if (score === 5000) {
+		alert('You win!');
+	} else if (collison === true) {
+		alert('You lose!');
+	}
 }
 
 //Update everything to move sprites
@@ -134,7 +192,6 @@ function updatePositions() {
 		enemy.dx = -enemy.dx;
 	}
  	});
- 	//if enemy y vertical position is less than canvas height
  	enemies = enemies.filter(function(enemy) {
  		return enemy.y < canvas.height;
 	});
@@ -144,20 +201,22 @@ function updatePositions() {
  		beam.y += beam.dy;
  	});
  	playerBeams = playerBeams.filter(function(beam) {
- 		return beam.y < canvas.height;
+ 		return beam.y > -95;
  	});
+ 	//enemyCollisionDetection();
+	//scoreEl.innerHTML = score;
 }
 
 //Increase number of enemies and enemy speed every x seconds
 var enemyAcceleration = 1.5;
 var incEnemiesTickCount = 5;
 var tickCounter = 0;
-var intervalId = setInterval(handleIntervalTick, 3000);
+var intervalId = setInterval(handleIntervalTick, 4000);
 
 function handleIntervalTick() {
-	enemyAcceleration += 0.3;
+	enemyAcceleration += 0.2;
 	// max acceleration
-	enemyAcceleration = Math.min(enemyAcceleration, 30);
+	enemyAcceleration = Math.min(enemyAcceleration, 8);
 	tickCounter++;
 }
 
@@ -172,6 +231,7 @@ function render() {
  	playerBeams.forEach(function(beam) {
  		ctx.drawImage(beam.image, beam.x, beam.y);
  	});
+ 	checkCollisions();
  	ctx.font = "16px Press Start K"; //renders score
  	ctx.fillStyle = "yellow";
  	ctx.fillText("Score " + score, 10, 22);
@@ -189,5 +249,3 @@ requestAnimationFrame(play);
 	startCreateEnemies();
 	//document.getElementById('startScreen').style.display=none;
 //});
-
-
