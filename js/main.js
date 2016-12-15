@@ -27,6 +27,8 @@ var player = {
 	height: 73
 };
 
+// function
+
 player.image.src = 'http://i.imgur.com/L8LDa4F.png';
 
 // Create player beams(bullets) sprites
