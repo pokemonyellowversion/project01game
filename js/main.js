@@ -10,24 +10,28 @@ canvas.height = h;
 canvas.width = w;
 
 // Add sounds
-var enemyExplosion = new Audio('http://www.freesound.org/data/previews/259/259962_2463454-lq.mp3');
-var beamSound = new Audio('http://www.galaxyfaraway.com/Sounds/LAZER.WAV');
+var playerFlyingSound = new Audio('http://www.matthewbarr.co.uk/sounds/xwing_flyby.wav');
+var enemyFlyingSound = new Audio('http://filmsound.org/starwars/tie.wav');
+var enemyExplosion = new Audio('"http://www.freesound.org/data/previews/259/259962_2463454-lq.mp3');
+var beamSound = new Audio('http://www.sa-matra.net/sounds/starwars/XWing-Proton.wav');
 var gameOverSound = new Audio('http://www.freesound.org/data/previews/333/333785_5858296-lq.mp3');
 var youWinSound = new Audio('http://freesound.org/data/previews/270/270333_5123851-lq.mp3');
-youWinSound.loop = false; // plays sound only once
+playerFlyingSound.loop = false; // plays sound only once
+youWinSound.loop = false; 
 
 // Create player spaceship sprite
 var player = {
 	image: new Image(),
 	x: w/2 - 50,
-	y: 570,
+	y: 555,
 	dx: 0,
 	dy: 0,
 	width: 100,
-	height: 73
+	height: 88
 };
 
 player.image.src = 'http://i.imgur.com/8eQAmcw.png';
+playerFlyingSound.play();
 
 // Create player beams(bullets) sprites
 var maxBeams = 5;
@@ -70,8 +74,11 @@ function Enemy (x, y, dx, dy, width, height) {
 	this.dx = dx;
 	this.dy = dy;
 	this.width = 75; // hard coded
-	this.height = 95; // hard coded
+	this.height = 81; // hard coded
 }
+
+// Create interval to play enemy sound every x seconds
+var enemyIntervalId = self.setInterval(function(){ enemyFlyingSound.play(); }, 7000);
 	
 // Create function to add enemies at random x positions over a random interval
 var createEnemiesTimerId;
@@ -117,8 +124,7 @@ function keyPressed(evt) {
     } else if (evt.keyCode == 40) { // down
         player.dx = 0;
     } else if (evt.keyCode == 13) { // enter
-	    play();
-	    startCreateEnemies(); 
+	    location.reload(); 
 	}     
 }
 
@@ -126,14 +132,14 @@ function keyPressed(evt) {
 function beamEnemyDetection(beam, enemy) { // checks if beam collided with enemy
 	return (beam.x < enemy.x + enemy.width - 30 &&
 		beam.x + beam.width > enemy.x &&
-		beam.y < enemy.y + enemy.height - 30 &&
+		beam.y < enemy.y + enemy.height - 44 &&
 		beam.height + beam.y > enemy.y);
 }
 
 function enemyCollisionDetection(enemy) { // checks if enemy collided with player
 	return (player.x < enemy.x + enemy.width - 30 &&
 		player.x + player.width > enemy.x &&
-		player.y < enemy.y + enemy.height - 30 &&
+		player.y < enemy.y + enemy.height - 44 &&
 		player.height + player.y > enemy.y);
 }
 
@@ -173,21 +179,22 @@ function checkCollisions() {
 
 // Create functions to check score for winner or game over
 function checkScore() {
-	if (numEnemiesDestroyed == 10) {
+	if (numEnemiesDestroyed == 1) {
 		youWinSound.play();
 		endGame();
 		ctx.font = '90px Press Start K'; 
-		ctx.fillText('YOU WIN', 300, 280);
+		ctx.fillText('YOU WIN', 350, 280);
 		ctx.font = '30px Press Start K'; 
-		ctx.fillText('Your score: ' + score, 410, 380);
-//		ctx.font = '30px Press Start K'; 
-//		ctx.fillText('Press enter to play again', 290, 480);
+		ctx.fillText('Your score: ' + score, 420, 380);
+		ctx.font = '30px Press Start K'; 
+		ctx.fillText('Press enter to play again', 290, 480);
 		player.remove();
 		enemy.remove();
 	}
 }
 
 function endGame() {
+	clearInterval(enemyIntervalId);
 	stopCreateEnemies();
 	clearInterval(intervalId);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -199,9 +206,9 @@ function gameOver() {
 	ctx.font = '90px Press Start K'; 
 	ctx.fillText('GAME OVER', 280, 280);
 	ctx.font = '30px Press Start K'; 
-	ctx.fillText('Your score: ' + score, 410, 380);
-//	ctx.font = '30px Press Start K'; 
-//	ctx.fillText('Press enter to play again', 290, 480);
+	ctx.fillText('Your score: ' + score, 420, 380);
+	ctx.font = '30px Press Start K'; 
+	ctx.fillText('Press enter to play again', 290, 480);
 	player.remove();
 	enemy.remove();
 }
