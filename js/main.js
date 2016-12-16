@@ -2,7 +2,7 @@
 var canvas = document.getElementById('canvas'); // access the canvas element from html
 var ctx = canvas.getContext('2d'); // create getContext() html object with properties and methods for drawing
 
-// Set canvas size to window width and height
+// Make canvas full screen
 var w = window.innerWidth;
 var h = window.innerHeight;
 
@@ -10,49 +10,30 @@ canvas.height = h;
 canvas.width = w;
 
 // Add sounds
-var enemyExplosion = new Audio('http://www.freesound.org/data/previews/259/259962_2463454-lq.mp3');
-var beamSound = new Audio('http://www.freesound.org/data/previews/344/344310_6199418-lq.mp3');
+var playerFlyingSound = new Audio('http://www.matthewbarr.co.uk/sounds/xwing_flyby.wav');
+var enemyFlyingSound = new Audio('http://filmsound.org/starwars/tie.wav');
+var enemyExplosion = new Audio('"http://www.freesound.org/data/previews/259/259962_2463454-lq.mp3');
+var beamSound = new Audio('http://www.sa-matra.net/sounds/starwars/XWing-Proton.wav');
 var gameOverSound = new Audio('http://www.freesound.org/data/previews/333/333785_5858296-lq.mp3');
 var youWinSound = new Audio('http://freesound.org/data/previews/270/270333_5123851-lq.mp3');
-youWinSound.loop = false; // plays sound only once
+playerFlyingSound.loop = false; // plays sound only once
+youWinSound.loop = false; 
 
-// Display start screen
-function startScreen() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.font = "90px Press Start K"; 
-	ctx.fillText("Space Shooters", 270, 300);
-	ctx.font = "40px Press Start K"; 
-	ctx.fillText("Press left and right arrows keys to move, spacebar to shoot", 420, 400);
-	ctx.font = "30px Press Start K"; 
-	ctx.fillText("Start", 480, 490);
-	ctx.beginPath();
-	ctx.rect(480, 490, 100, 100);
-	ctx.addHitRegion({id: start});
-}
-
-canvas.onclick = function (evt) {
-    if (evt.region) {
-        requestAnimationFrame(play);
-        startCreateEnemies();
-    }
-};
-
-// Create player spaceship sprite
+// Create player X-Wing sprite
 var player = {
 	image: new Image(),
 	x: w/2 - 50,
-	y: 570,
+	y: 555,
 	dx: 0,
 	dy: 0,
 	width: 100,
-	height: 73
+	height: 88
 };
 
-// function
+player.image.src = 'http://i.imgur.com/8eQAmcw.png';
+playerFlyingSound.play();
 
-player.image.src = 'http://i.imgur.com/L8LDa4F.png';
-
-// Create player beams(bullets) sprites
+// Create player beam(bullet) sprites
 var maxBeams = 5;
 var playerBeams = [];
 function PlayerBeam(x, y, dx, dy, width, height) {
@@ -63,8 +44,8 @@ function PlayerBeam(x, y, dx, dy, width, height) {
 	this.y = y;
 	this.dx = 0;
 	this.dy = -4;
-	this.width = 61; // hard coded
-	this.height = 100; //hard coded
+	this.width = 61; 
+	this.height = 100; 
 }
 
 // Create player shoot function and push beams
@@ -81,20 +62,26 @@ player.midpoint = function() { // beam appears at midpoint of player's (x,y) pos
 	};
 };
 
-//Create enemy spaceship sprite
+// Create enemy TIE Fighter sprite
 var enemies = [];
 function Enemy (x, y, dx, dy, width, height) {
 	var img = new Image();
-	img.src = 'http://i.imgur.com/Frun8cP.png';
+	img.src = 'http://i.imgur.com/zNUXYdy.png';
 	this.image = img;
 	this.id = Date.now();
 	this.x = x;
 	this.y = y;
 	this.dx = dx;
 	this.dy = dy;
-	this.width = 75; // hard coded
-	this.height = 95; // hard coded
+	this.width = 75; 
+	this.height = 81; 
 }
+
+// Create interval to play enemy sound every x seconds
+var enemyIntervalId = self.setInterval(function() { 
+	enemyFlyingSound.play(); 
+	}, 10000
+);
 	
 // Create function to add enemies at random x positions over a random interval
 var createEnemiesTimerId;
@@ -119,43 +106,41 @@ function stopCreateEnemies() {
 
 function getRandomBetween(min, max) { // generates a random number between two numbers
 	return min + Math.floor(Math.random() * (max - min));
-}
+} 
 
-//var enemyBeam = new Image();
-//enemyBeam.src = "http://i.imgur.com/DukiQLC.png";  
-
-// Create score and set to 0 at start
+// Create score and enemy counters
 var score = 0;	
-
-// Create enemies destroyed counter and set to 0 at start
 var numEnemiesDestroyed = 0;
 
 // Add event listeners to keyboard controls when keys are pressed down
-document.addEventListener("keydown", keyPressed);
+document.addEventListener('keydown', keyPressed);
  
 function keyPressed(evt) {
 	if (evt.keyCode == 32) { // spacebar
 		player.shoot();
 	} else if (evt.keyCode == 37) { // left
         player.dx -= 0.5;
-    } else if (evt.keyCode === 39) { // right
+    } else if (evt.keyCode == 39) { // right
     	player.dx += 0.5;
     } else if (evt.keyCode == 40) { // down
         player.dx = 0;
-    }    
+    } else if (evt.keyCode == 13) { // enter
+	    location.reload(); // refreshes the page and restarts game
+	}     
 }
 
+// Create functions to detect collisions
 function beamEnemyDetection(beam, enemy) { // checks if beam collided with enemy
-	return (beam.x < enemy.x + enemy.width - 30 &&
+	return (beam.x < enemy.x + enemy.width - 20 &&
 		beam.x + beam.width > enemy.x &&
-		beam.y < enemy.y + enemy.height - 30 &&
+		beam.y < enemy.y + enemy.height - 44 &&
 		beam.height + beam.y > enemy.y);
 }
 
 function enemyCollisionDetection(enemy) { // checks if enemy collided with player
-	return (player.x < enemy.x + enemy.width - 30 &&
+	return (player.x < enemy.x + enemy.width - 20 &&
 		player.x + player.width > enemy.x &&
-		player.y < enemy.y + enemy.height - 30 &&
+		player.y < enemy.y + enemy.height - 44 &&
 		player.height + player.y > enemy.y);
 }
 
@@ -167,7 +152,7 @@ function checkEnemyPlayerCollision() { // checks each enemy if collided with pla
 	});
 }
 
-function checkBeamEnemyCollision() { // if beam collided with enemy, removes both and increase score
+function checkBeamEnemyCollision() { // if beam collided with enemy, removes both and increases score
 	playerBeams.forEach(function(beam) {
 		enemies.forEach(function(enemy) {
 			if (beamEnemyDetection(beam, enemy)) {
@@ -187,40 +172,44 @@ function checkBeamEnemyCollision() { // if beam collided with enemy, removes bot
 	});
 }
 
-function checkScore() {
-	if (numEnemiesDestroyed == 10) {
-		youWinSound.play();
-		endGame();
-		ctx.font = "90px Press Start K"; 
-		ctx.fillText("YOU WIN", 270, 300);
-		ctx.font = "40px Press Start K"; 
-		ctx.fillText("Your score: " + score, 420, 400);
-		player.remove();
-		enemy.remove();
-	}
-}
-
-function endGame() {
-	stopCreateEnemies();
-	clearInterval(intervalId);
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-
 function checkCollisions() {
 	checkEnemyPlayerCollision();
 	checkBeamEnemyCollision();
 	checkScore();
 }
 
+// Create functions to check for winner or game over
+function checkScore() {
+	if (numEnemiesDestroyed == 10) {
+		youWinSound.play();
+		endGame();
+		ctx.font = '90px Press Start K'; 
+		ctx.fillText('YOU WIN', 350, 280);
+		ctx.font = '30px Press Start K'; 
+		ctx.fillText('Your score: ' +score, 420, 380);
+		ctx.font = '30px Press Start K'; 
+		ctx.fillText('Press enter to play again', 290, 480);
+		player.remove();
+		enemy.remove();
+	}
+}
+
+function endGame() {
+	clearInterval(enemyIntervalId);
+	stopCreateEnemies();
+	clearInterval(intervalId);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function gameOver() {
 	gameOverSound.play();
 	endGame();
-	ctx.font = "90px Press Start K"; 
-	ctx.fillText("GAME OVER", 270, 300);
-	ctx.font = "40px Press Start K"; 
-	ctx.fillText("Your score: " + score, 420, 400);
-	ctx.font = "30px Press Start K"; 
-	ctx.fillText("Play Again?", 480, 490);
+	ctx.font = '90px Press Start K'; 
+	ctx.fillText('GAME OVER', 280, 280);
+	ctx.font = '30px Press Start K'; 
+	ctx.fillText('Your score: ' +score, 420, 380);
+	ctx.font = '30px Press Start K'; 
+	ctx.fillText('Press enter to play again', 290, 480);
 	player.remove();
 	enemy.remove();
 }
@@ -239,14 +228,14 @@ function updatePositions() {
 		enemy.dx = -enemy.dx; // bounces enemy off left and right walls
 	}
  	});
- 	enemies = enemies.filter(function(enemy) { // removes enemies if they go offscreen
+ 	enemies = enemies.filter(function(enemy) { // removes enemies if they go off bottom of screen  			
  		return enemy.y < canvas.height;
 	});
  	playerBeams.forEach(function(beam) { // updates beams
  		beam.x += beam.dx;
  		beam.y += beam.dy;
  	});
- 	playerBeams = playerBeams.filter(function(beam) { // removes beams if they go offscreen
+ 	playerBeams = playerBeams.filter(function(beam) { // removes beams if they go off top of screen
  		return beam.y > -95;
  	});
 }
@@ -275,10 +264,11 @@ function render() {
  		ctx.drawImage(beam.image, beam.x, beam.y);
  	});
  	checkCollisions();
- 	ctx.font = "16px Press Start K"; 
- 	ctx.fillStyle = "yellow";
- 	ctx.fillText("Score " + score, 20, 30); // displays score
- 	ctx.fillText("Enemy Speed " + enemyAcceleration.toFixed(2), canvas.width - 280, 30); // displays enemy speed 
+ 	ctx.font = '16px Press Start K'; // renders score
+ 	ctx.fillStyle = 'yellow';
+ 	ctx.fillText('Score: ' + score, 20, 30);
+ 	ctx.fillText('Targets destroyed: ' + numEnemiesDestroyed, 20, 50);
+ 	ctx.fillText('Enemy Speed ' + enemyAcceleration.toFixed(2), canvas.width - 280, 30);
 }
 
 // Create main game loop

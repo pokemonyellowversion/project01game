@@ -1,8 +1,11 @@
 * {
 	background-image: url("http://wallpapercave.com/wp/pEeUsp1.jpg");
+<<<<<<< HEAD
+=======
+	font-family: "Press Start K";
+>>>>>>> master
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
-	font-color: yellow;
 }
 
