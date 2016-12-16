@@ -228,9 +228,11 @@ function updatePositions() {
 		enemy.dx = -enemy.dx; // bounces enemy off left and right walls
 	}
  	});
+ 	var numEnemies = enemies.length;
  	enemies = enemies.filter(function(enemy) { // removes enemies if they go off bottom of screen  			
  		return enemy.y < canvas.height;
 	});
+	numEnemiesDestroyed -= (numEnemies - enemies.length);
  	playerBeams.forEach(function(beam) { // updates beams
  		beam.x += beam.dx;
  		beam.y += beam.dy;
