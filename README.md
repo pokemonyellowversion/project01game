@@ -4,6 +4,12 @@
 
 X-Wing VS TIE Fighters 8-Bit is inspired by my love of the Star Tours ride at Disneyland and retro arcade 8-bit styling. Move the player with the left and right arrows. Press the down arrow to stop. Press spacebar to shoot. Press enter to restart the game.
 
+<img src=http://i.imgur.com/1eYHRXv.png>
+
+<img src=http://i.imgur.com/wRBkS0G.png>
+
+<img src=http://i.imgur.com/iMxKgy5.png>
+
 [Technologies Used]
 
 Technologies used are HTML Canvas, CSS, and Javascript. I also used GIMP 2 to edit the sprite images.
