@@ -1,6 +1,6 @@
 // Link canvas to html
 var canvas = document.getElementById('canvas'); //access the canvas
-var ctx = canvas.getContext('2d'); // access methods and propertie to draw on the canvas
+var ctx = canvas.getContext('2d'); // access methods and properties to draw on the canvas
 
 // Set canvas size to window width and height
 var w = window.innerWidth;
@@ -179,7 +179,7 @@ function checkCollisions() {
 
 // Create functions to check score for winner or game over
 function checkScore() {
-	if (numEnemiesDestroyed == 1) {
+	if (numEnemiesDestroyed == 10) {
 		youWinSound.play();
 		endGame();
 		ctx.font = '90px Press Start K'; 
@@ -227,17 +227,14 @@ function updatePositions() {
 		enemy.dx = -enemy.dx; // bounces enemy off left and right walls
 	}
  	});
- 	enemies = enemies.filter(function(enemy) { // removes enemies if they go offscreen
- 		//if (enemy.y + enemy.dy > canvas.height - enemy.height || enemy.y + enemy.dy < 0) {
-// 			score -= 50;
-// 		}
+ 	enemies = enemies.filter(function(enemy) { // removes enemies if they go off bottom of screen  			
  		return enemy.y < canvas.height;
 	});
  	playerBeams.forEach(function(beam) { // updates beams
  		beam.x += beam.dx;
  		beam.y += beam.dy;
  	});
- 	playerBeams = playerBeams.filter(function(beam) { // removes beams if they go offscreen
+ 	playerBeams = playerBeams.filter(function(beam) { // removes beams if they go off top of screen
  		return beam.y > -95;
  	});
 }
