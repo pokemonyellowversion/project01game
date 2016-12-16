@@ -131,14 +131,14 @@ function keyPressed(evt) {
 
 // Create functions to detect collisions
 function beamEnemyDetection(beam, enemy) { // checks if beam collided with enemy
-	return (beam.x < enemy.x + enemy.width - 30 &&
+	return (beam.x < enemy.x + enemy.width - 20 &&
 		beam.x + beam.width > enemy.x &&
 		beam.y < enemy.y + enemy.height - 44 &&
 		beam.height + beam.y > enemy.y);
 }
 
 function enemyCollisionDetection(enemy) { // checks if enemy collided with player
-	return (player.x < enemy.x + enemy.width - 30 &&
+	return (player.x < enemy.x + enemy.width - 20 &&
 		player.x + player.width > enemy.x &&
 		player.y < enemy.y + enemy.height - 44 &&
 		player.height + player.y > enemy.y);
