@@ -2,7 +2,7 @@
 var canvas = document.getElementById('canvas'); //access the canvas
 var ctx = canvas.getContext('2d'); // access methods and properties to draw on the canvas
 
-// Set canvas size to window width and height
+// Make canvas full screen
 var w = window.innerWidth;
 var h = window.innerHeight;
 
@@ -19,7 +19,7 @@ var youWinSound = new Audio('http://freesound.org/data/previews/270/270333_51238
 playerFlyingSound.loop = false; // plays sound only once
 youWinSound.loop = false; 
 
-// Create player spaceship sprite
+// Create player X-Wing sprite
 var player = {
 	image: new Image(),
 	x: w/2 - 50,
@@ -33,7 +33,7 @@ var player = {
 player.image.src = 'http://i.imgur.com/8eQAmcw.png';
 playerFlyingSound.play();
 
-// Create player beams(bullets) sprites
+// Create player beam(bullet) sprites
 var maxBeams = 5;
 var playerBeams = [];
 function PlayerBeam(x, y, dx, dy, width, height) {
@@ -44,8 +44,8 @@ function PlayerBeam(x, y, dx, dy, width, height) {
 	this.y = y;
 	this.dx = 0;
 	this.dy = -4;
-	this.width = 61; // hard coded
-	this.height = 100; //hard coded
+	this.width = 61; 
+	this.height = 100; 
 }
 
 // Create player shoot function and push beams
@@ -62,7 +62,7 @@ player.midpoint = function() { // beam appears at midpoint of player's (x,y) pos
 	};
 };
 
-// Create enemy spaceship sprite
+// Create enemy TIE Fighter sprite
 var enemies = [];
 function Enemy (x, y, dx, dy, width, height) {
 	var img = new Image();
@@ -73,12 +73,15 @@ function Enemy (x, y, dx, dy, width, height) {
 	this.y = y;
 	this.dx = dx;
 	this.dy = dy;
-	this.width = 75; // hard coded
-	this.height = 81; // hard coded
+	this.width = 75; 
+	this.height = 81; 
 }
 
 // Create interval to play enemy sound every x seconds
-var enemyIntervalId = self.setInterval(function(){ enemyFlyingSound.play(); }, 10000);
+var enemyIntervalId = self.setInterval(function() { 
+	enemyFlyingSound.play(); 
+	}, 10000
+);
 	
 // Create function to add enemies at random x positions over a random interval
 var createEnemiesTimerId;
@@ -105,10 +108,8 @@ function getRandomBetween(min, max) { // generates a random number between two n
 	return min + Math.floor(Math.random() * (max - min));
 } 
 
-// Create score and set to 0 at start
+// Create score and enemy counters
 var score = 0;	
-
-// Create enemy counter and set to 0 at start
 var numEnemiesDestroyed = 0;
 
 // Add event listeners to keyboard controls when keys are pressed down
@@ -124,7 +125,7 @@ function keyPressed(evt) {
     } else if (evt.keyCode == 40) { // down
         player.dx = 0;
     } else if (evt.keyCode == 13) { // enter
-	    location.reload(); 
+	    location.reload(); // refreshes the page and restarts game
 	}     
 }
 
@@ -151,7 +152,7 @@ function checkEnemyPlayerCollision() { // checks each enemy if collided with pla
 	});
 }
 
-function checkBeamEnemyCollision() { // if beam collided with enemy, removes both and increase score
+function checkBeamEnemyCollision() { // if beam collided with enemy, removes both and increases score
 	playerBeams.forEach(function(beam) {
 		enemies.forEach(function(enemy) {
 			if (beamEnemyDetection(beam, enemy)) {
@@ -177,7 +178,7 @@ function checkCollisions() {
 	checkScore();
 }
 
-// Create functions to check score for winner or game over
+// Create functions to check for winner or game over
 function checkScore() {
 	if (numEnemiesDestroyed == 10) {
 		youWinSound.play();
@@ -185,7 +186,7 @@ function checkScore() {
 		ctx.font = '90px Press Start K'; 
 		ctx.fillText('YOU WIN', 350, 280);
 		ctx.font = '30px Press Start K'; 
-		ctx.fillText('Your score: ' + score, 420, 380);
+		ctx.fillText('Your score: ' +score, 420, 380);
 		ctx.font = '30px Press Start K'; 
 		ctx.fillText('Press enter to play again', 290, 480);
 		player.remove();
@@ -206,7 +207,7 @@ function gameOver() {
 	ctx.font = '90px Press Start K'; 
 	ctx.fillText('GAME OVER', 280, 280);
 	ctx.font = '30px Press Start K'; 
-	ctx.fillText('Your score: ' + score, 420, 380);
+	ctx.fillText('Your score: ' +score, 420, 380);
 	ctx.font = '30px Press Start K'; 
 	ctx.fillText('Press enter to play again', 290, 480);
 	player.remove();

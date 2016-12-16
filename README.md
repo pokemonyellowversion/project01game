@@ -2,7 +2,7 @@
 
 [Description]
 
-X-Wing VS TIE Fighters 8-bit is inspired by my love of the Star Tours ride at Disneyland and retro arcade 8-bit styling. Move the player with the left and right arrows. Press spacebar to shoot. Press enter to restart the game.
+X-Wing VS TIE Fighters 8-Bit is inspired by my love of the Star Tours ride at Disneyland and retro arcade 8-bit styling. Move the player with the left and right arrows. Press spacebar to shoot. Press enter to restart the game.
 
 [Technologies Used]
 
