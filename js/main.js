@@ -78,7 +78,7 @@ function Enemy (x, y, dx, dy, width, height) {
 }
 
 // Create interval to play enemy sound every x seconds
-var enemyIntervalId = self.setInterval(function(){ enemyFlyingSound.play(); }, 7000);
+var enemyIntervalId = self.setInterval(function(){ enemyFlyingSound.play(); }, 10000);
 	
 // Create function to add enemies at random x positions over a random interval
 var createEnemiesTimerId;
