@@ -183,11 +183,11 @@ function checkScore() {
 	if (numEnemiesDestroyed == 10) {
 		youWinSound.play();
 		endGame();
-		ctx.font = '90px Press Start K'; 
+		ctx.font = '90px press_start_kregular'; 
 		ctx.fillText('YOU WIN', 350, 280);
-		ctx.font = '30px Press Start K'; 
+		ctx.font = '30px press_start_kregular'; 
 		ctx.fillText('Your score: ' +score, 420, 380);
-		ctx.font = '30px Press Start K'; 
+		ctx.font = '30px press_start_kregular'; 
 		ctx.fillText('Press enter to play again', 290, 480);
 		player.remove();
 		enemy.remove();
@@ -204,11 +204,11 @@ function endGame() {
 function gameOver() {
 	gameOverSound.play();
 	endGame();
-	ctx.font = '90px Press Start K'; 
+	ctx.font = '90px press_start_kregular'; 
 	ctx.fillText('GAME OVER', 280, 280);
-	ctx.font = '30px Press Start K'; 
+	ctx.font = '30px press_start_kregular'; 
 	ctx.fillText('Your score: ' +score, 420, 380);
-	ctx.font = '30px Press Start K'; 
+	ctx.font = '30px press_start_kregular'; 
 	ctx.fillText('Press enter to play again', 290, 480);
 	player.remove();
 	enemy.remove();
@@ -266,7 +266,7 @@ function render() {
  		ctx.drawImage(beam.image, beam.x, beam.y);
  	});
  	checkCollisions();
- 	ctx.font = '16px Press Start K'; // renders score
+ 	ctx.font = '16px press_start_kregular'; // renders score
  	ctx.fillStyle = 'yellow';
  	ctx.fillText('Score: ' + score, 20, 30);
  	ctx.fillText('Targets destroyed: ' + numEnemiesDestroyed, 20, 50);

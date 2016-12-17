@@ -1,18 +1,15 @@
 * {
 	background-image: url("http://wallpapercave.com/wp/pEeUsp1.jpg");
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-	font-family: "Press Start K";
->>>>>>> master
-=======
->>>>>>> master
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
 }
 
 @font-face {
-    font-family: 'Press Start K';
-    src: url('assets/prstartk.ttf');
+    font-family: 'press_start_kregular';
+    src: url('prstartk-webfont.woff2') format('woff2'),
+         url('prstartk-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
 }
