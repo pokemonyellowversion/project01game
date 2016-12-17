@@ -1,6 +1,6 @@
 // Link canvas to html
-var canvas = document.getElementById('canvas'); //access the canvas
-var ctx = canvas.getContext('2d'); // access methods and properties to draw on the canvas
+var canvas = document.getElementById('canvas'); // access the canvas element from html
+var ctx = canvas.getContext('2d'); // create getContext() html object with properties and methods for drawing
 
 // Make canvas full screen
 var w = window.innerWidth;
