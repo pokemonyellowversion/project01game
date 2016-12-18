@@ -22,8 +22,8 @@ youWinSound.loop = false;
 // Create player X-Wing sprite
 var player = {
 	image: new Image(),
-	x: w/2 - 50,
-	y: 555,
+	x: canvas.width/2 - 50,
+	y: canvas.height - 100,
 	dx: 0,
 	dy: 0,
 	width: 100,
@@ -206,6 +206,8 @@ function endGame() {
 function gameOver() {
 	gameOverSound.play();
 	endGame();
+	ctx.textBaseline = 'middle'; 
+	ctx.textAlign = 'center';
 	ctx.font = '90px press_start_kregular'; 
 	ctx.fillText('GAME OVER', canvas.width/2, canvas.height - 400);
 	ctx.font = '30px press_start_kregular'; 
