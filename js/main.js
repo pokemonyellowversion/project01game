@@ -12,7 +12,7 @@ canvas.width = w;
 // Add sounds
 var playerFlyingSound = new Audio('http://www.matthewbarr.co.uk/sounds/xwing_flyby.wav');
 var enemyFlyingSound = new Audio('http://filmsound.org/starwars/tie.wav');
-var enemyExplosion = new Audio('"http://www.freesound.org/data/previews/259/259962_2463454-lq.mp3');
+var enemyExplosion = new Audio('http://www.freesound.org/data/previews/18/18384_71614-lq.mp3');
 var beamSound = new Audio('http://www.sa-matra.net/sounds/starwars/XWing-Proton.wav');
 var gameOverSound = new Audio('http://www.freesound.org/data/previews/333/333785_5858296-lq.mp3');
 var youWinSound = new Audio('http://freesound.org/data/previews/270/270333_5123851-lq.mp3');
@@ -68,7 +68,6 @@ function Enemy (x, y, dx, dy, width, height) {
 	var img = new Image();
 	img.src = 'http://i.imgur.com/zNUXYdy.png';
 	this.image = img;
-	this.id = Date.now();
 	this.x = x;
 	this.y = y;
 	this.dx = dx;
