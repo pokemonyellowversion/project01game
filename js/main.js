@@ -22,8 +22,8 @@ youWinSound.loop = false;
 // Create player X-Wing sprite
 var player = {
 	image: new Image(),
-	x: w/2 - 50,
-	y: 555,
+	x: canvas.width/2 - 50,
+	y: canvas.height - 100,
 	dx: 0,
 	dy: 0,
 	width: 100,
@@ -126,7 +126,7 @@ function keyPressed(evt) {
         player.dx = 0;
     } else if (evt.keyCode == 13) { // enter
 	    location.reload(); // refreshes the page and restarts game
-	}     
+	}    
 }
 
 // Create functions to detect collisions
@@ -180,17 +180,17 @@ function checkCollisions() {
 
 // Create functions to check for winner or game over
 function checkScore() {
-	if (numEnemiesDestroyed == 1) {
+	if (numEnemiesDestroyed == 10) {
 		youWinSound.play();
 		endGame();
 		ctx.textBaseline = 'middle'; 
 		ctx.textAlign = 'center'; 
 		ctx.font = '90px press_start_kregular'; 
-		ctx.fillText('YOU WIN', canvas.width/2, canvas.height - 400);
+		ctx.fillText('YOU WIN', canvas.width/2, canvas.height - 420);
 		ctx.font = '30px press_start_kregular'; 
-		ctx.fillText('Your score: ' +score, canvas.width/2, canvas.height - 290);
+		ctx.fillText('Your score: ' +score, canvas.width/2, canvas.height - 310);
 		ctx.font = '30px press_start_kregular'; 
-		ctx.fillText('Press enter to play again', canvas.width/2, canvas.height - 200);
+		ctx.fillText('Press enter to play again', canvas.width/2, canvas.height - 220);
 		player.remove();
 		enemy.remove();
 	}
@@ -206,12 +206,14 @@ function endGame() {
 function gameOver() {
 	gameOverSound.play();
 	endGame();
+	ctx.textBaseline = 'middle'; 
+	ctx.textAlign = 'center'; 
 	ctx.font = '90px press_start_kregular'; 
-	ctx.fillText('GAME OVER', canvas.width/2, canvas.height - 400);
+	ctx.fillText('GAME OVER', canvas.width/2, canvas.height - 420);
 	ctx.font = '30px press_start_kregular'; 
-	ctx.fillText('Your score: ' +score, canvas.width/2, canvas.height - 290);
+	ctx.fillText('Your score: ' +score, canvas.width/2, canvas.height - 310);
 	ctx.font = '30px press_start_kregular'; 
-	ctx.fillText('Press enter to play again', canvas.width/2, canvas.height - 200);
+	ctx.fillText('Press enter to play again', canvas.width/2, canvas.height - 220);
 	player.remove();
 	enemy.remove();
 }
