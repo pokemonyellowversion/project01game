@@ -180,15 +180,17 @@ function checkCollisions() {
 
 // Create functions to check for winner or game over
 function checkScore() {
-	if (numEnemiesDestroyed == 10) {
+	if (numEnemiesDestroyed == 1) {
 		youWinSound.play();
 		endGame();
+		ctx.textBaseline = 'middle'; 
+		ctx.textAlign = 'center'; 
 		ctx.font = '90px press_start_kregular'; 
-		ctx.fillText('YOU WIN', 350, 280);
+		ctx.fillText('YOU WIN', canvas.width/2, canvas.height - 400);
 		ctx.font = '30px press_start_kregular'; 
-		ctx.fillText('Your score: ' +score, 420, 380);
+		ctx.fillText('Your score: ' +score, canvas.width/2, canvas.height - 290);
 		ctx.font = '30px press_start_kregular'; 
-		ctx.fillText('Press enter to play again', 290, 480);
+		ctx.fillText('Press enter to play again', canvas.width/2, canvas.height - 200);
 		player.remove();
 		enemy.remove();
 	}
@@ -205,11 +207,11 @@ function gameOver() {
 	gameOverSound.play();
 	endGame();
 	ctx.font = '90px press_start_kregular'; 
-	ctx.fillText('GAME OVER', 280, 280);
+	ctx.fillText('GAME OVER', canvas.width/2, canvas.height - 400);
 	ctx.font = '30px press_start_kregular'; 
-	ctx.fillText('Your score: ' +score, 420, 380);
+	ctx.fillText('Your score: ' +score, canvas.width/2, canvas.height - 290);
 	ctx.font = '30px press_start_kregular'; 
-	ctx.fillText('Press enter to play again', 290, 480);
+	ctx.fillText('Press enter to play again', canvas.width/2, canvas.height - 200);
 	player.remove();
 	enemy.remove();
 }
