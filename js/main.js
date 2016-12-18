@@ -68,7 +68,6 @@ function Enemy (x, y, dx, dy, width, height) {
 	var img = new Image();
 	img.src = 'http://i.imgur.com/zNUXYdy.png';
 	this.image = img;
-	this.id = Date.now();
 	this.x = x;
 	this.y = y;
 	this.dx = dx;
