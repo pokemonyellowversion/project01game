@@ -180,7 +180,7 @@ function checkCollisions() {
 
 // Create functions to check for winner or game over
 function checkScore() {
-	if (numEnemiesDestroyed == 1) {
+	if (numEnemiesDestroyed == 10) {
 		youWinSound.play();
 		endGame();
 		ctx.textBaseline = 'middle'; 
