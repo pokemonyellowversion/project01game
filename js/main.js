@@ -78,6 +78,7 @@ function Enemy (x, y, dx, dy, width, height) {
 
 // Create interval to play enemy sound every x seconds
 var enemyIntervalId = self.setInterval(function() { 
+	if (enemies.length >= 1);
 	enemyFlyingSound.play(); 
 	}, 10000
 );
@@ -123,9 +124,9 @@ function keyPressed(evt) {
     	player.dx += 0.5;
     } else if (evt.keyCode == 40) { // down
         player.dx = 0;
-    } else if (evt.keyCode == 13) { // enter
+    } else if (evt.keyCode == 13) { // shift
 	    location.reload(); // refreshes the page and restarts game
-	}    
+	}  
 }
 
 // Create functions to detect collisions
@@ -268,12 +269,14 @@ function render() {
  	playerBeams.forEach(function(beam) {
  		ctx.drawImage(beam.image, beam.x, beam.y);
  	});
- 	checkCollisions();
+ 	checkCollisions(); 
+	ctx.textAlign = 'left';
  	ctx.font = '16px press_start_kregular'; // renders score
  	ctx.fillStyle = 'yellow';
  	ctx.fillText('Score: ' + score, 20, 30);
- 	ctx.fillText('Targets destroyed: ' + numEnemiesDestroyed, 20, 50);
- 	ctx.fillText('Enemy Speed ' + enemyAcceleration.toFixed(2), canvas.width - 280, 30);
+ 	ctx.fillText('Targets destroyed: ' + numEnemiesDestroyed,  20, 50);
+ 	ctx.textAlign = 'right';
+ 	ctx.fillText('Enemy Speed ' + enemyAcceleration.toFixed(2), canvas.width - 20, 30);
 }
 
 // Create main game loop
