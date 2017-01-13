@@ -16,7 +16,7 @@ Technologies used are HTML Canvas, CSS, and Javascript. I also used GIMP 2 to ed
 
 <b>[Getting Started]</b>
 
-https://pokemonyellowversion.github.io/project01game/
+Click <a href="https://pokemonyellowversion.github.io/project01game/">here</a> to  play the game.
 
 <b>[Next Steps]</b>
 
